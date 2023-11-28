@@ -15,7 +15,9 @@ class RegistFormView extends StatelessWidget {
           return Scaffold(
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.navigate_next_outlined),
-              onPressed: () {},
+              onPressed: () {
+                controller.sendDataToTheNextView();
+              },
             ),
             appBar: AppBar(
               title: Text("Regisztráció"),
@@ -66,29 +68,49 @@ class RegistFormView extends StatelessWidget {
                     ],
                     onChanged: (p0) {
                       if (p0 != null) {
-                        controller.selectedGender = p0.toString();
-                      } else {
-                        controller.selectedGender = "";
-                      }
-                    },
+                        if (p0.toString() == "férfi") {
+                          controller.male = true;
+                        } else {
+                          controller.male = false;
+                        }
+                    }}
                   ),
                   Divider(),
                   Text("kedvenc színed"),
                   FlutGroupedButtons(
                     isRadio: false,
                     data: [
-                      "zöld",
-                      "kék",
-                      "sarga",
+                      "CSAK A FIDESZ!",
+                      "ÉLJEN A GYURCSÁNY!",
+                      "PERSZE KÁDÁR IDEJÉN MINDEN JÓB VÓT",
+                      "HORTHY MIKLÓS KATONÁJA VAGYOK",
                     ],
-                    onChanged: (p0) {},
+                    onChanged: (p0) {
+                      if (p0 != null) {
+                        controller.favoriteColors = p0;
+                        print(p0);
+                      }
+                    },
                   ),
                   Divider(),
                   Text("Válaszd ki a kedvec autómárkád"),
                   Text("❤️❤️❤️"),
                   CupertinoButton.filled(
                     child: Text("Autómárka kiválasztása"),
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.bottomSheet(Container(
+                        color: Colors.white,
+                        height: 150,
+                        child: CupertinoPicker(
+                          itemExtent: 50,
+                          onSelectedItemChanged: (int index) {
+                            print(index);
+                            controller.setSelectedCarBand(index);
+                          },
+                          children: controller.elements,
+                        ),
+                      ));
+                    },
                   ),
                 ],
               ),
